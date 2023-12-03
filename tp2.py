@@ -2,7 +2,9 @@ import random
 
 def init():
     # Code d'initialisation de l'interface graphique ici
-
+    
+# La fonction shuffle_deck retourne une liste aléatoire des nombres
+# 0 à 51 qui représente un jeu de carte.
 def shuffle_deck():    
     deck = []
     while len(deck) < 52:    
@@ -15,7 +17,20 @@ def shuffle_deck():
     # Code pour mélanger le paquet de cartes ici
     pass
 
-def deal_initial_cards():
+# La fonction deal_initial_cards prend une liste de nombres et la 
+# retourne sous une liste aléatoire à 4 index pour les 4 rangées 
+# du jeux.
+def deal_initial_cards(deck):
+    one = []
+    two = []
+    three = []
+    four = []
+    while len(deck) > 0:
+        one.append(deck.pop())
+        two.append(deck.pop())
+        three.append(deck.pop())
+        four.append(deck.pop())
+    return [one, two, three, four]
     # Code pour distribuer les cartes initiales ici
     pass
 
