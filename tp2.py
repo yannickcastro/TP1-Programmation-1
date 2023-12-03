@@ -3,7 +3,15 @@ import random
 def init():
     # Code d'initialisation de l'interface graphique ici
 
-def shuffle_deck():
+def shuffle_deck():    
+    deck = []
+    while len(deck) < 52:    
+        card = math.floor(random() * 52)
+        if card in deck:
+            continue        
+        else:
+            deck.append(card)
+    return deck
     # Code pour mélanger le paquet de cartes ici
     pass
 
