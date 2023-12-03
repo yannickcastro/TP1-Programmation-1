@@ -1,0 +1,70 @@
+import random
+import math
+# Vous devez remplacer le contenu de ce fichier par votre propre code
+# tel qu'indiqué dans la description du TP2.
+
+def init():
+
+    # Changer le contenu HTML de l'élément racine
+    racine = document.querySelector("#cb-body")
+    racine.innerHTML = """
+      <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .card {
+            width: 100px;
+            height: 150px;
+            display: inline-block;
+            margin: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #000;
+            line-height: 150px;
+        }
+
+        .lime-bg {
+            background-color: lime;
+        }
+      </style>
+      <div id="jeu"></div>
+    """
+
+    game_container = document.querySelector("#jeu")
+
+    cards = []
+
+    def genererNombre():
+        return (math.random() * 10) + 1
+
+    def jouerCarte(card, number):
+        somme = sum(map(lambda c: int(c.textContent), cards))
+        if somme == number:
+            alert('Bravo! Vous avez gagné!')
+        else:
+            alert('Désolé, la somme est incorrecte. Essayez à nouveau.')
+
+        initGame()
+
+    def initGame():
+        game_container.innerHTML = ''
+        nonlocal cards
+        cards = []
+
+        for i in range(5):
+            number = genererNombre()
+            card = document.createElement('div')
+            card.className = 'card'
+            card.textContent = number
+            card.onclick = lambda card=card, number=number: jouerCarte(card, number)
+            game_container.appendChild(card)
+            cards.append(card)
+
+        # Appliquer la couleur de fond lime à la première carte
+        cards[0].classList.add('lime-bg')
+
+    # Initialiser le jeu au chargement de la page
+    initGame()
