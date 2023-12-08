@@ -1,0 +1,49 @@
+from random import randint
+
+# Vous devez remplacer le contenu de ce fichier par votre propre code
+# tel qu'indiqué dans la description du TP2.  Le code ici correspond
+# à l'exemple donné dans la description.
+
+# Fonction pour générer un nom de carte fictif (à remplacer par votre logique)
+
+def generer_nom_carte():
+  cartes = ["2S.svg", "QH.svg", "JC.svg", "10D.svg"]  # Ajoutez d'autres noms de cartes si nécessaire
+  indice_carte = randint(0, len(cartes) - 1)
+  return cartes[indice_carte]
+
+def generer_grille(rows, cols):
+  grille_html = """
+<style>
+  #jeu table { float:none; }  
+  #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
+  #jeu table td img { height:140px; }
+</style>    
+<div id='jeu'>
+  <table>"
+"""
+  for i in range(rows):
+    grille_html += "<tr>"
+    for j in range(cols):
+      case_id = "case" + str(i * cols + j)
+      grille_html += "<td id='" + case_id + "' ><img src='cards/" + generer_nom_carte() + "'></td>"
+    grille_html += "</tr>"
+  grille_html += "</table>"
+  return grille_html
+
+for i in range():
+  print (1)
+
+# Générer le contenu HTML des grilles 13x4
+contenu_html = generer_grille(4, 13)
+
+racine = document.querySelector("#cb-body")
+racine.innerHTML = contenu_html
+
+
+
+
+def init():
+
+# changer la couleur de fond de la case 0
+  case0 = document.querySelector("#case3")
+  case0.setAttribute("style", "background-color: lime")
