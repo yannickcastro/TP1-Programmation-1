@@ -1,0 +1,71 @@
+def init():
+  # Fonction pour générer un nom de carte fictif (à remplacer par votre logique) 
+  def generer_nom_carte():
+    cartes =[]
+    for i in range(13):
+      cartes_tmp = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+      cartes.append(cartes_tmp[i] + "C.svg")
+      cartes.append(cartes_tmp[i] + "D.svg")
+      cartes.append(cartes_tmp[i] + "H.svg")
+      cartes.append(cartes_tmp[i] + "S.svg")
+    return cartes
+
+  def generer_grille(rows, cols):
+    global cartes1, cartes2
+    cartes1 = []
+    cartes2 = []
+    grille_html = """
+    <style>
+      #jeu table { float:none; }  
+      #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
+      #jeu table td img { height:140px; }
+    </style>    
+    <div id='jeu'>
+      <table>"
+    """
+    nom_carte = generer_nom_carte()
+    for i in range(rows):
+      grille_html += "<tr>"
+      for j in range(cols):
+        indice_carte = randint(0, len(nom_carte) - 1)
+        if nom_carte[indice_carte][0] == 'A':
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' ><img src='cards/absent.svg'></td>"
+          cartes1.append(nom_carte.pop(indice_carte))
+        else:
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' ><img src='cards/" + nom_carte[indice_carte] + "'></td>"
+          cartes1.append(nom_carte.pop(indice_carte))
+      grille_html += "</tr>"
+    grille_html += "</table>"
+    cartes = generer_nom_carte()
+    for i in range(len(cartes)):
+      cartes2.append(cartes.index(cartes1[i]))      
+    return grille_html
+
+  racine = document.querySelector("#cb-body")
+  racine.innerHTML = generer_grille(4,13)
+  print(cartes1)
+  print(cartes2)
+  '''
+  # changer la couleur de fond de la case 0
+  case0 = document.querySelector("#case3")
+  case0.setAttribute("style", "background-color: lime")
+  '''
+  '''
+  liste = deck_divise(deck())
+  print(liste)
+  les_as = trouve_index(liste, [0, 1, 2, 3])
+  les_as = les_zeros(les_as)
+  les_prec = precedante(les_as) 
+  cartes_prec = cartes(liste, les_prec)
+  cartes_sui = suivante(cartes_prec, les_as)
+  print(cartes_sui)
+  le_choix = cartes_sui[math.floor(random() * len(cartes_sui))]
+  print(le_choix)
+  depart = trouve(liste, le_choix)
+  print(depart)
+  arriver = destination(liste, le_choix)
+  print(arriver)
+  print(bouger(liste, depart, arriver))
+  '''
