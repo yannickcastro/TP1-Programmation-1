@@ -151,3 +151,62 @@ def init():
     print(arriver)
     print(bouger(liste, depart, arriver))
 init()
+########################################################################################################
+liste = [[4, 0, 49, 23], [36, 39, 28, 12], [38, 2, 7, 44], [16, 4, 0, 17]]
+formule = [[4, 0, 49, 23], [36, 39, 28, 12], [38, 2, 7, 44], [16, 4, 0, 17]]
+
+# La fonction comparer prend deux listes en argument. La première est la listes
+# des cartes et le deuxième est leur position finale. La fonction retourne une
+# liste de cartes qui sont situé à leur position finale.
+def comparer(liste, formule):
+    pop_liste = [[], [], [], []]
+    for i in range(len(formule)):
+        for j in range(len(formule[i])):
+            if liste[i][j] == formule[i][j]:
+                pop_liste[i].append(formule[i][j])
+            else:
+                break
+    return pop_liste
+
+# La fonction pop prend en argument trois liste en arguments. La première est 
+# la listes des cartes, la deuxième est leur position finale et la troisième 
+# est les cartes à enlever des deux première. La fonction retourne deux listes 
+# de cartes la première restante du jeu et deuxièmes les carte restante dans 
+# leur ordre finale.
+def pop(liste, formule, cartes_place):
+    for i in range(len(cartes_place)):
+        for j in range(len(cartes_place[i])):
+            liste[i].remove(cartes_place[i][j])
+            formule[i].remove(cartes_place[i][j])
+    return liste, formule
+    
+pop_liste = comparer(liste, formule)
+print(pop(liste, formule, pop_liste))        
+
+# La fonction victoire prend deux listes en aguments. La première est la listes
+# des cartes, la deuxième est leur position finale. La fonction retourne la  
+# liste des cates qui ne sont pas placé. Si la liste est vide il y a victoire.
+def victoire(liste, form_temp):
+    if len(liste) == 0:
+        print("victoire")        
+    elif liste[0] == form_temp[0]:
+        liste.remove(form_temp[0])
+        form_temp.remove(form_temp[0])
+        victoire(liste, form_temp)        
+    else:
+        pass
+    return liste
+
+
+
+def test_victoire():
+    assert victoire([], []) == []
+    assert victoire([1], [1]) == []
+    assert victoire([2, 1], [1, 2]) == [2, 1]
+    assert victoire([1, 2], [1, 2]) == []
+    assert victoire([1, 2, 3, 4, 5], [5, 4, 3, 2, 1]) == [1, 2, 3, 4, 5]
+    assert victoire([1, 2, 3, 4, 5], [1, 4, 3, 2, 1]) == [2, 3, 4, 5]
+    assert victoire([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]) == []
+    assert victoire([1, 2, 3, 4, 5], [1, 2, 3, 5, 4]) == [4, 5]
+
+test_victoire()
