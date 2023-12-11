@@ -210,3 +210,41 @@ def test_victoire():
     assert victoire([1, 2, 3, 4, 5], [1, 2, 3, 5, 4]) == [4, 5]
 
 test_victoire()
+
+
+liste = [[4, 0, 49, 23], [36, 39, 28, 12], [38, 2, 7, 44], [16, 4, 8, 17]]
+
+# La fonction prend une liste de quatre index en argument. La fonction retourne
+# une liste de tous les terme sans index.
+def simplifie(liste):
+    liste_simple = []
+    for i in range(len(liste)):
+        for j in range(len(liste[i])):
+            liste_simple.append(liste[i][j])            
+    return liste_simple 
+
+# La fonction prend une liste de quatre index en argument et retourne une liste
+# de quatre index brassé.
+def brasser(liste):
+    liste_un = len(liste[0])
+    liste_deux = len(liste[1])
+    liste_trois = len(liste[2])
+    liste_quatre = len(liste[3])
+    liste_simple = simplifie(liste)
+    liste_len = len(liste_simple)
+    liste_temp = []
+    liste_brasse = [[], [], [], []]
+    while len(liste_simple) > 0:
+        indice = math.floor(random() * len(liste_simple))
+        liste_temp.append(liste_simple.pop(indice))
+    for i in range(liste_un):
+        liste_brasse[0].append(liste_temp.pop())
+    for i in range(liste_deux):
+        liste_brasse[1].append(liste_temp.pop())
+    for i in range(liste_trois):
+        liste_brasse[2].append(liste_temp.pop())
+    for i in range(liste_quatre):
+        liste_brasse[3].append(liste_temp.pop())
+    return liste_brasse
+
+print(brasser(liste))
