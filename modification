@@ -43,3 +43,113 @@ def test_destination():
         
 
 test_destination()
+
+
+# Crée une liste de 0 à 51
+deck_neuf = list(range(52))
+
+# La fonction deck ne prend pas d'argument.La fonction retourne une liste des
+# nombres 0 à 51 dans un ordre aléatoire.
+def deck():
+    deck = []
+    while len(deck) < 52:    
+        card = math.floor(random() * 52)
+        if card in deck:
+            continue        
+        else:
+            deck.append(card)
+    return deck
+
+def test_deck():
+    assert len(deck()) == 52
+    assert len(deck()) == 52
+    assert len(deck()) == 52
+    assert len(deck()) == 52
+
+test_deck()
+
+# La fonction deck_divise prend une liste en argument.La fonction retourne une 
+# liste en quatre index où la liste de départ a été inclu un par index jusqu'à
+# se que la liste soit vide.
+def deck_divise(deck):
+    one = []
+    two = []
+    three = []
+    four = []
+    while len(deck) > 0:
+        if deck !=0 and len(deck) % 4 == 0:
+            one.append(deck.pop())
+            two.append(deck.pop())
+            three.append(deck.pop())
+            four.append(deck.pop())
+        else:
+            break
+    return [one, two, three, four]
+
+def test_deck_divise():
+    assert deck_divise([]) == [[], [], [], []]
+    assert deck_divise([1, 2, 3, 4]) == [[4], [3], [2], [1]]
+    assert deck_divise([1, 2, 3, 4, 5]) == [[], [], [], []]
+    assert deck_divise([1, 2, 3, 4, 5, 6, 7, 8]) == \
+    [[8, 4], [7, 3], [6, 2], [5, 1]]
+    
+
+test_deck_divise()
+
+##############################################################################
+#La fonction donne la liste des position finale
+##############################################################################
+def formule(deck):
+    one = []
+    two = []
+    three = []
+    four = []    
+    while len(deck) > 0:
+        one.append(deck.pop(0))
+        two.append(deck.pop(0))
+        three.append(deck.pop(0))
+        four.append(deck.pop(0))         
+    one.pop(0)
+    two.pop(0)
+    three.pop(0)
+    four.pop(0)
+    return [one, two, three, four]
+##############################################################################
+#Donne la liste des position a pop dans la liste car bien placé
+##############################################################################
+# La fonction comparer prend deux listes en argument. La première est la listes
+# des cartes et le deuxième est leur position finale. La fonction retourne une
+# liste de cartes qui sont situé à leur position finale.
+def comparer(liste, formule):
+    pop_liste = [[], [], [], []]
+    for i in range(len(formule)):
+        for j in range(len(formule[i])):
+            if liste[i][j] == formule[i][j]:
+                pop_liste[i].append(formule[i][j])
+            else:
+                break
+    return pop_liste
+##############################################################################
+# Enleve les cartes bien placé pour garder les cartes a brasser
+##############################################################################
+def pop(liste, formule, cartes_place):
+    for i in range(len(cartes_place)):
+        for j in range(len(cartes_place[i])):
+            liste[i].remove(cartes_place[i][j])
+            formule[i].remove(cartes_place[i][j])
+    return liste, formule
+
+
+liste = [[4, 47, 37, 44, 41, 38, 17, 24, 45, 0, 32, 43, 13], \
+         [28, 23, 40, 22, 1, 16, 8, 31, 34, 7, 48, 9, 25], \
+         [27, 5, 46, 49, 11, 12, 42, 18, 30, 14, 20, 50, 15], \
+         [39, 3, 10, 6, 51, 19, 2, 36, 26, 33, 21, 29, 35]]
+formule = formule(deck_neuf)
+pop_liste = comparer(liste, formule)
+print(liste)
+print()
+print(formule)
+print()
+print(pop_liste)
+print(pop(liste, formule, pop_liste)) 
+
