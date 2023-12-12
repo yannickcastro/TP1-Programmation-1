@@ -1,0 +1,19 @@
+def destination(liste, choix):
+    if choix >= 4 and choix <= 7:
+        coord = []
+        coord_temp = []
+        les_as = trouve_index(liste, [0, 1, 2, 3])
+        for i in range(len(les_as)):
+            if les_as[i][1] == 0:
+                coord_temp.append(les_as[i])
+                
+            else:
+                pass
+        coord.append(coord_temp[math.floor(random() * len(coord_temp))])
+        return coord
+    else:       
+        prec = choix -4
+        coord_prec = trouve(liste, prec)
+        coord = [coord_prec[0], coord_prec[1]+1]
+        return coord
+
