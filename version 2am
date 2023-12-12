@@ -1,0 +1,298 @@
+#Yannick Castro - 10 décemebre 2023
+
+from random import randint
+
+def deck_divise(deck):
+  one = deck[0:13]
+  two = deck[13:26]
+  three = deck[26:39]
+  four = deck[39:53]
+  return [one, two, three, four]
+
+def trouve(liste, carte):
+  index = []
+  for i in range(len(liste)):
+    for j in range(len(liste[i])):
+      if carte == liste[i][j]:
+        index = [i, j]
+        break        
+  return index
+
+def trouve_index(liste, cartes):
+  index = []
+  for i in range(len(liste)):
+    index.append(trouve(liste, cartes[i]))
+  return index
+
+def precedante(index):
+  les_prec = []
+  for i in range(len(index)):
+    temp = index[i]
+    if temp[1] >= 1 and temp[1] <=12:
+      les_prec.append([temp[0], temp[1]-1])
+    else:
+      pass
+  return les_prec
+
+def les_zeros(les_as):
+  double = []
+  n = 0
+  for i in range(len(les_as)):
+    temp_i = les_as[i]
+    for j in range(len(les_as)):
+      temp_j = les_as[j]
+      if temp_i[0] == temp_j[0] and temp_i[1] == temp_j[1] - 1:
+        double.append(temp_j)
+      else:
+        pass          
+  for i in range(len(double)):
+      les_as.remove(double[i])
+        
+  return les_as 
+
+def cartes(liste, index):
+  cartes = []
+  for i in range(len(index)):
+    temp = index[i]
+    cartes.append(liste[temp[0]][temp[1]])
+  return cartes
+           
+def suivante(cartes, les_as):
+  cartes_sui = []
+  for i in range(len(les_as)):
+    if les_as[i][1] == 0:
+      cartes_sui.append(4)
+      cartes_sui.append(5)
+      cartes_sui.append(6)
+      cartes_sui.append(7)
+      break
+    else:
+      pass
+  for i in range(len(cartes)):
+    if cartes[i] >= 4 and cartes[i] <= 47: 
+      cartes_sui.append(cartes[i] + 4)
+    else:
+      pass
+            
+  return cartes_sui
+       
+def destination(liste, choix):
+  prec = choix -4
+  coord_prec = trouve(liste, prec)
+  coord = [coord_prec[0], coord_prec[1]+1]
+  return coord
+
+def bouger(liste, depart, arriver):
+  temp_dep = liste[depart[0]][depart[1]]
+  temp_arr = liste[arriver[0]][arriver[1]]
+  liste[depart[0]].remove(temp_dep)
+  liste[depart[0]].insert(depart[1], temp_arr)
+  liste[arriver[0]].remove(temp_arr)
+  liste[arriver[0]].insert(arriver[1], temp_dep)
+  return liste
+
+
+#Affichage HTML
+def generer_nom_carte():
+  cartes =[]
+  for i in range(13):
+    cartes_tmp = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+    cartes.append(cartes_tmp[i] + "C.svg")
+    cartes.append(cartes_tmp[i] + "D.svg")
+    cartes.append(cartes_tmp[i] + "H.svg")
+    cartes.append(cartes_tmp[i] + "S.svg")
+  return cartes
+
+def melanger_liste(liste):
+  n = len(liste)
+  for i in range(n - 1, 0, -1):
+    j = randint(0, i)
+    liste[i], liste[j] = liste[j], liste[i]
+
+nb_brassage = 3
+
+
+def jeu():
+  # Fonction pour générer un nom de carte fictif (à remplacer par votre logique) 
+  global cartes1, cartes2, liste, nb_brassage 
+  cartes1 = []
+  cartes2 = []
+  def generer_grille(rows, cols):
+    grille_html = """
+    <style>
+      #jeu table { float:none; }  
+      #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
+      #jeu table td img { height:140px; }
+      
+      .bouton {
+        font-size: 15px;
+        border-radius: 5px;
+        padding: -2px;
+        border: 1px solid #999;
+      }
+      
+      #nombre-clicks {
+      margin-left: 10px;
+      }
+    </style>    
+    <div id='jeu'>
+      <table>
+    """
+    nom_carte = generer_nom_carte()
+    for i in range(rows):
+      grille_html += "<tr>"
+      for j in range(cols):
+        indice_carte = randint(0, len(nom_carte) - 1)
+        if nom_carte[indice_carte][0] == 'A':
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' onclick='mise_a_jour(\"" + case_id + "\", \"" + nom_carte[indice_carte] + "\")'><img src='cards/absent.svg'></td>"
+          cartes1.append(nom_carte.pop(indice_carte))
+        else:
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' onclick='mise_a_jour(\"" + case_id + "\", \"" + nom_carte[indice_carte] + "\")'><img src='cards/" + nom_carte[indice_carte] + "'></td>"
+          cartes1.append(nom_carte.pop(indice_carte))
+      grille_html += "</tr>"
+    grille_html += "</table>"
+    cartes = generer_nom_carte()
+    for i in range(len(cartes)):
+      cartes2.append(cartes.index(cartes1[i]))    
+    return grille_html
+  
+  racine = document.querySelector("#cb-body")
+  racine.innerHTML = generer_grille(4,13) +  """
+    <br>
+    <div class="bouton-container">
+      <p id ="nombre-clicks">Vous pouvez encore
+      <button class ="bouton" onclick="brasser_cartes()" >Brasser les cartes</button> """ + str(nb_brassage) + """ fois
+    </div>
+    <div class="bouton-container">
+      <button id ="nombre-clicks" class ="bouton" onclick=init()>Nouvelle partie</button>   
+    </div>
+    """
+  #print(cartes1)
+  #print(cartes2)
+  
+  liste = deck_divise(cartes2)
+  les_as = trouve_index(liste, [0, 1, 2, 3])
+  les_as = les_zeros(les_as)
+  les_prec = precedante(les_as)
+  cartes_prec = cartes(liste, les_prec)
+  cartes_sui = suivante(cartes_prec, les_as)
+  
+  for l in range(len(cartes_sui)):
+    indice = trouve(liste,cartes_sui[l])
+    indice = (indice[0])*13 + indice[1]
+    # changer la couleur de fond de la case 0
+    case_id = "#case"+str(indice)
+    case0 = document.querySelector(case_id)
+    case0.setAttribute("style", "background-color: lime")
+
+    
+def mise_a_jour(case,indice):
+  # changer la couleur de fond de la case 0
+  case0 = document.querySelector("#"+case)
+  case0.removeAttribute("style")
+  les_as = trouve_index(liste, [0, 1, 2, 3])
+  les_as = les_zeros(les_as)
+  les_prec = precedante(les_as)
+  cartes_prec = cartes(liste, les_prec)
+  cartes_sui = suivante(cartes_prec, les_as)
+  repartition_cartes = generer_nom_carte()
+  indice_carte = repartition_cartes.index(indice)
+  indice_choix = cartes_sui.index(indice_carte)
+  le_choix = cartes_sui[indice_choix]
+  depart = trouve(liste, le_choix)
+  arriver = destination(liste, le_choix)
+  print(depart)
+  print(arriver)
+  nouv_list = bouger(liste, depart, arriver)
+  print(nouv_list)
+  changement(nouv_list)
+
+def changement(liste_cartes):
+  racine = document.querySelector("#cb-body")
+  racine.innerHTML = ""
+  def generer_grille(rows, cols):
+    grille_html = """
+    <style>
+      #jeu table { float:none; }  
+      #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
+      #jeu table td img { height:140px; }
+      
+      .bouton {
+        font-size: 15px;
+        border-radius: 5px;
+        padding: -2px;
+        border: 1px solid #999;
+      }
+      
+      #nombre-clicks {
+      margin-left: 10px;
+      }
+    </style>
+    <div id='jeu'>
+      <table>
+    """
+    nom_carte = generer_nom_carte()
+    for i in range(rows):
+      grille_html += "<tr>"
+      for j in range(cols):
+        if liste_cartes[i][j] <= 3:
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' onclick='mise_a_jour(\"" + case_id + "\", \"" + nom_carte[liste_cartes[i][j]] + "\")'><img src='cards/absent.svg'></td>"
+          #print(liste_cartes[i][j])
+        else:
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' onclick='mise_a_jour(\"" + case_id + "\", \"" + nom_carte[liste_cartes[i][j]] + "\")'><img src='cards/" + nom_carte[liste_cartes[i][j]] + "'></td>"
+          #print(liste_cartes[i][j])
+      grille_html += "</tr>"
+    grille_html += "</table>"
+    return grille_html
+  
+  racine = document.querySelector("#cb-body")
+  racine.innerHTML = generer_grille(4,13) +  """
+    <br>
+    <div class="bouton-container">
+      <p id ="nombre-clicks">Vous pouvez encore
+      <button class ="bouton" onclick="brasser_cartes()" >Brasser les cartes</button> """ + str(nb_brassage) + """ fois
+    </div>
+    <div class="bouton-container">
+      <button id ="nombre-clicks" class ="bouton" onclick=init()>Nouvelle partie</button>   
+    </div>
+    """
+  
+  les_as = trouve_index(liste_cartes, [0, 1, 2, 3])
+  les_as = les_zeros(les_as)
+  les_prec = precedante(les_as)
+  cartes_prec = cartes(liste_cartes, les_prec)
+  cartes_sui = suivante(cartes_prec, les_as)
+  #print(cartes_sui) --
+  
+  for l in range(len(cartes_sui)):
+    indice = trouve(liste,cartes_sui[l])
+    indice = (indice[0])*13 + indice[1]
+    # changer la couleur de fond de la case 0
+    case_id = "#case"+str(indice)
+    case0 = document.querySelector(case_id)
+    case0.setAttribute("style", "background-color: lime")  
+      
+
+def init():
+  jeu()
+  
+def brasser_cartes():
+  global nb_brassage
+  nb_brassage = nb_brassage - 1
+  if nb_brassage == 0:
+    racine = document.querySelector("#cb-body")
+    racine.innerHTML = generer_grille(4,13) +  """
+    <br>
+    <div class="bouton-container">
+      <p id ="nombre-clicks">Vous pouvez encore
+      <button class ="bouton" onclick="brasser_cartes()" >Brasser les cartes</button> """ + str(nb_brassage) + """ fois
+    </div>
+    <div class="bouton-container">
+      <button id ="nombre-clicks" class ="bouton" onclick=init()>Nouvelle partie</button>   
+    </div>
+    """
+  jeu()
