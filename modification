@@ -1,7 +1,7 @@
 def destination(liste, choix):
     if choix >= 4 and choix <= 7:
-        coord = []
         coord_temp = []
+        
         les_as = trouve_index(liste, [0, 1, 2, 3])
         for i in range(len(les_as)):
             if les_as[i][1] == 0:
@@ -9,11 +9,37 @@ def destination(liste, choix):
                 
             else:
                 pass
-        coord.append(coord_temp[math.floor(random() * len(coord_temp))])
+        coord = coord_temp[math.floor(random() * len(coord_temp))] 
         return coord
-    else:       
+    else:
+        
         prec = choix -4
         coord_prec = trouve(liste, prec)
         coord = [coord_prec[0], coord_prec[1]+1]
         return coord
 
+def test_destination():
+    assert destination([[2, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 27, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [44, 48, 1, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 5)\
+    == [0, 0]
+    assert destination([[27, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 2, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [1, 48, 44, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 5)\
+    == [3, 0]
+    assert destination([[27, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 2, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [1, 48, 44, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 11)\
+    == [3, 11]
+    
+    assert destination([[27, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 2, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [1, 48, 44, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 39)\
+    == [2, 4] 
+        
+
+test_destination()
