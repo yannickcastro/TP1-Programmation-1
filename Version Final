@@ -18,6 +18,16 @@ def deck_divise(deck):
         four.append(deck.pop())
     return [one, two, three, four]
 
+def test_deck_divise():
+    assert deck_divise([]) == [[], [], [], []]
+    assert deck_divise([1, 2, 3, 4]) == [[4], [3], [2], [1]]
+    assert deck_divise([1, 2, 3, 4, 5]) == [[], [], [], []]
+    assert deck_divise([1, 2, 3, 4, 5, 6, 7, 8]) == \
+    [[8, 4], [7, 3], [6, 2], [5, 1]]
+    
+
+test_deck_divise()
+
 # La fonction trouve prend une liste et une catre en argument. La fonction 
 # retourne les index de la carte sous la forme [i, j].
 def trouve(liste, carte):
@@ -29,6 +39,17 @@ def trouve(liste, carte):
                 break        
     return index
 
+def test_trouve():
+    assert trouve([[1], [2], [3], [4]], 5) == []
+    assert trouve([[1], [2], [3], [4]], 1) == [0, 0]
+    assert trouve([[1], [2], [3], [4]], 2) == [1, 0]
+    assert trouve([[1], [2], [3], [4]], 3) == [2, 0]
+    assert trouve([[1], [2], [3], [4]], 4) == [3, 0]
+    assert trouve([[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]], 7) == [2, 1]
+    
+
+test_trouve()
+
 # La fonction trouve_index prend unn liste et des cartes en arguments. La 
 # fonction fais un appel à trouve(liste, carte) puis avec append() retourne
 # une liste qui contient les index.
@@ -37,6 +58,19 @@ def trouve_index(liste, cartes):
     for i in range(len(liste)):
         index.append(trouve(liste, cartes[i]))
     return index
+
+def test_trouve_index():    
+    assert trouve_index([[1, 5], [2, 6], [3, 7], [4, 8]], [1, 2]) ==\
+    [[0, 0], [1, 0]]
+    assert trouve_index([[1, 5], [2, 6], [3, 7], [4, 8]], [3, 4]) ==\
+    [[2, 0], [3, 0]]
+    assert trouve_index([[1, 5], [2, 6], [3, 7], [4, 8]], [5, 6]) ==\
+    [[0, 1], [1, 1]]
+    assert trouve_index([[1, 5], [2, 6], [3, 7], [4, 8]], [7, 8]) ==\
+    [[2, 1], [3, 1]]
+    
+    
+test_trouve_index()
 
 # La fonction précédante prend un index en argument et retourne l'index qui le 
 # précède  si celui si n'est pas nul. Entré = [i, j], sorti = [i, j-1]
@@ -49,6 +83,13 @@ def precedante(index):
         else:
             pass
     return les_prec
+
+def test_precedante():
+    assert precedante([[0, 0], [1, 0]]) == []
+    assert precedante([[0, 0], [1, 1]]) == [[1, 0]]
+    assert precedante([[1, 1], [2, 2], [3, 3]]) == [[1, 0], [2, 1], [3, 2]]
+
+test_precedante()
 
 # La fonction les_zeros prend la position des as en arguments. La fonction 
 # garde la position des as qui n'ont pas d'autre as comme voisins et si il y a
@@ -71,6 +112,16 @@ def les_zeros(les_as):
         
     return les_as 
 
+def test_les_zeros():
+    assert les_zeros([[0, 0], [0, 1], [2, 4], [3, 1]]) ==\
+    [[0, 0], [2, 4], [3, 1]]
+    assert les_zeros([[0, 0], [1, 1], [2, 4], [3, 1]]) ==\
+    [[0, 0], [1, 1], [2, 4], [3, 1]]
+    assert les_zeros([[0, 0], [0, 1], [0, 2], [0, 3]]) ==\
+    [[0, 0]]
+
+test_les_zeros()
+
 # La fonction prend une liste et des index en argument. La fonction retourne
 # une liste des cartes se situant à ces index.
 def cartes(liste, index):
@@ -79,6 +130,20 @@ def cartes(liste, index):
         temp = index[i]
         cartes.append(liste[temp[0]][temp[1]])
     return cartes
+
+def test_cartes():
+    assert cartes([[18, 9, 29, 38], [20, 50, 31, 48],\
+                   [1, 14, 43, 42], [12, 18, 21, 41]], [[0, 0]]) == [18]
+    assert cartes([[18, 9, 29, 38], [20, 50, 31, 48],\
+                   [1, 14, 43, 42], [12, 18, 21, 41]], [[1, 1]]) == [50]
+    assert cartes([[18, 9, 29, 38], [20, 50, 31, 48],\
+                   [1, 14, 43, 42], [12, 18, 21, 41]],\
+                  [[1, 1], [3, 3]]) == [50, 41]
+    assert cartes([[18, 9, 29, 38], [20, 50, 31, 48],\
+                   [1, 14, 43, 42], [12, 18, 21, 41]],\
+                  [[1, 1], [3, 3], [2, 0]]) == [50, 41, 1]
+    
+test_cartes()
  
 # La fonction suivante prend des cartes et la position des as. La fonction
 # retourne les carte qui suivent ceux donné en arguments et ajoute les deux si
@@ -100,6 +165,16 @@ def suivante(cartes, les_as):
         else:
             pass
     return cartes_sui
+
+def test_suivante():
+    assert suivante([44, 45, 22], [[2, 5], [2, 0], [1, 2], [1, 9]])\
+    == [4, 5, 6, 7, 48, 49, 26]
+    assert suivante([22, 17, 34], [[2, 5], [2, 0], [1, 2], [1, 9]])\
+    == [4, 5, 6, 7, 26, 21, 38]
+    assert suivante([7, 11, 15], [[2, 5], [2, 0], [1, 2], [1, 9]])\
+    == [4, 5, 6, 7, 11, 15, 19]
+    
+test_suivante()  
   
   
 
@@ -107,10 +182,50 @@ def suivante(cartes, les_as):
 # retourne les coordonnées de l'as qui corespond au point ou le choix vas 
 # retrouver la carte précédente.
 def destination(liste, choix):
-    prec = choix -4
-    coord_prec = trouve(liste, prec)
-    coord = [coord_prec[0], coord_prec[1]+1]
-    return coord
+    if choix >= 4 and choix <= 7:
+        coord_temp = []
+        
+        les_as = trouve_index(liste, [0, 1, 2, 3])
+        for i in range(len(les_as)):
+            if les_as[i][1] == 0:
+                coord_temp.append(les_as[i])
+                
+            else:
+                pass
+        coord = coord_temp[math.floor(random() * len(coord_temp))] 
+        return coord
+    else:
+        
+        prec = choix -4
+        coord_prec = trouve(liste, prec)
+        coord = [coord_prec[0], coord_prec[1]+1]
+        return coord
+
+def test_destination():
+    assert destination([[2, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 27, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [44, 48, 1, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 5)\
+    == [0, 0]
+    assert destination([[27, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 2, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [1, 48, 44, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 5)\
+    == [3, 0]
+    assert destination([[27, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 2, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [1, 48, 44, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 11)\
+    == [3, 11]
+    
+    assert destination([[27, 47, 31, 13, 33, 21, 12, 32, 22, 49, 50, 14, 26],\
+                        [37, 8, 25, 10, 24, 16, 20, 18, 51, 2, 23, 34, 28], \
+                        [17, 6, 9, 35, 3, 43, 40, 36, 46, 4, 19, 15, 39], \
+                        [1, 48, 44, 41, 29, 5, 30, 42, 11, 45, 7, 0, 38]], 39)\
+    == [2, 4] 
+        
+
+test_destination()
 
 # La fonction prend une liste, un point de départ et d'arrivé en arguments.
 # La fonction effectue l'échange des deux cartes et retourne les nouvelle 
@@ -123,6 +238,46 @@ def bouger(liste, depart, arriver):
     liste[arriver[0]].remove(temp_arr)
     liste[arriver[0]].insert(arriver[1], temp_dep)
     return liste
+
+def test_bouger():
+    assert bouger([[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30], \
+              [42, 24, 47, 41, 20, 43, 28, 16, 26, 3, 45, 34, 25],\
+              [46, 10, 18, 4, 50, 23, 12, 39, 0, 32, 37, 6, 2], \
+              [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]],\
+             [1, 5], [2, 8]) == \
+    [[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30],\
+     [42, 24, 47, 41, 20, 0, 28, 16, 26, 3, 45, 34, 25],\
+     [46, 10, 18, 4, 50, 23, 12, 39, 43, 32, 37, 6, 2],\
+     [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]]
+    assert bouger([[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30], \
+              [42, 24, 47, 41, 20, 43, 28, 16, 26, 3, 45, 34, 25],\
+              [46, 10, 18, 4, 50, 23, 12, 39, 0, 32, 37, 6, 2], \
+              [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]],\
+             [0, 12], [1, 9]) == \
+    [[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 3],\
+     [42, 24, 47, 41, 20, 43, 28, 16, 26, 30, 45, 34, 25],\
+     [46, 10, 18, 4, 50, 23, 12, 39, 0, 32, 37, 6, 2],\
+     [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]]
+    assert bouger([[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30], \
+              [42, 24, 47, 41, 20, 43, 28, 16, 26, 3, 45, 34, 25],\
+              [46, 10, 18, 4, 50, 23, 12, 39, 0, 32, 37, 6, 2], \
+              [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]],\
+             [2, 10], [3, 4]) == \
+    [[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30], \
+     [42, 24, 47, 41, 20, 43, 28, 16, 26, 3, 45, 34, 25], \
+     [46, 10, 18, 4, 50, 23, 12, 39, 0, 32, 1, 6, 2], \
+     [51, 9, 13, 33, 37, 17, 40, 48, 31, 11, 8, 38, 19]]
+    assert bouger([[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30], \
+              [42, 24, 47, 41, 20, 43, 28, 16, 26, 3, 45, 34, 25],\
+              [46, 10, 18, 4, 50, 23, 12, 39, 0, 32, 37, 6, 2], \
+              [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]],\
+             [2, 1], [2, 12]) == \
+    [[49, 5, 14, 36, 21, 7, 29, 27, 22, 15, 35, 44, 30], \
+     [42, 24, 47, 41, 20, 43, 28, 16, 26, 3, 45, 34, 25],\
+     [46, 18, 4, 50, 23, 12, 39, 0, 32, 37, 6, 2, 10], \
+     [51, 9, 13, 33, 1, 17, 40, 48, 31, 11, 8, 38, 19]]
+
+test_bouger()
 
 #Affichage HTML
 def generer_nom_carte():
