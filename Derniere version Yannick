@@ -1,0 +1,251 @@
+#Yannick Castro / Alexandre Laberge - 10 décemebre 2023
+
+from random import randint
+
+# La fonction deck_divise prend une liste en argument.La fonction retourne une 
+# liste en quatre index où la liste de départ a été inclu un par index jusqu'à
+# se que la liste soit vide.
+def deck_divise(deck):
+    one = []
+    two = []
+    three = []
+    four = []
+    while len(deck) > 0:
+        one.append(deck.pop())
+        two.append(deck.pop())
+        three.append(deck.pop())
+        four.append(deck.pop())
+    return [one, two, three, four]
+
+# La fonction trouve prend une liste et une catre en argument. La fonction 
+# retourne les index de la carte sous la forme [i, j].
+def trouve(liste, carte):
+    index = []
+    for i in range(len(liste)):
+        for j in range(len(liste[i])):
+            if carte == liste[i][j]:
+                index = [i, j]
+                break        
+    return index
+
+# La fonction trouve_index prend unn liste et des cartes en arguments. La 
+# fonction fais un appel à trouve(liste, carte) puis avec append() retourne
+# une liste qui contient les index.
+def trouve_index(liste, cartes):
+    index = []
+    for i in range(len(liste)):
+        index.append(trouve(liste, cartes[i]))
+    return index
+
+# La fonction précédante prend un index en argument et retourne l'index qui le 
+# précède  si celui si n'est pas nul. Entré = [i, j], sorti = [i, j-1]
+def precedante(index):
+    les_prec = []
+    for i in range(len(index)):
+        temp = index[i]
+        if temp[1] >= 1 and temp[1] <=12:
+            les_prec.append([temp[0], temp[1]-1])
+        else:
+            pass
+    return les_prec
+
+# La fonction les_zeros prend la position des as en arguments. La fonction 
+# garde la position des as qui n'ont pas d'autre as comme voisins et si il y a
+# deux as un à la suite de l'autre la fonction garde celui avec le plus petit
+# index. La fonction retourne une liste des index gardés.
+def les_zeros(les_as):
+    double = []
+    n = 0
+    for i in range(len(les_as)):
+        temp_i = les_as[i]
+        for j in range(len(les_as)):
+            temp_j = les_as[j]
+            if temp_i[0] == temp_j[0] and temp_i[1] == temp_j[1] - 1:
+                double.append(temp_j)
+            else:
+                pass
+            
+    for i in range(len(double)):
+        les_as.remove(double[i])
+        
+    return les_as 
+
+# La fonction prend une liste et des index en argument. La fonction retourne
+# une liste des cartes se situant à ces index.
+def cartes(liste, index):
+    cartes = []
+    for i in range(len(index)):
+        temp = index[i]
+        cartes.append(liste[temp[0]][temp[1]])
+    return cartes
+ 
+# La fonction suivante prend des cartes et la position des as. La fonction
+# retourne les carte qui suivent ceux donné en arguments et ajoute les deux si
+# les as se trouve au début de la liste.
+def suivante(cartes, les_as):
+    cartes_sui = []
+    for i in range(len(les_as)):
+        if les_as[i][1] == 0:
+            cartes_sui.append(4)
+            cartes_sui.append(5)
+            cartes_sui.append(6)
+            cartes_sui.append(7)
+            break
+        else:
+            pass
+    for i in range(len(cartes)):
+        if cartes[i] >= 4 and cartes[i] <= 47: 
+            cartes_sui.append(cartes[i] + 4)
+        else:
+            pass
+    return cartes_sui
+  
+  
+
+# La fonction destination prend un liste et un choix en argument. La fonction
+# retourne les coordonnées de l'as qui corespond au point ou le choix vas 
+# retrouver la carte précédente.
+def destination(liste, choix):
+    if choix >= 4 and choix <= 7:
+        coord_temp = []
+        
+        les_as = trouve_index(liste, [0, 1, 2, 3])
+        for i in range(len(les_as)):
+            if les_as[i][1] == 0:
+                coord_temp.append(les_as[i])
+                
+            else:
+                pass
+        coord = coord_temp[math.floor(random() * len(coord_temp))] 
+        return coord
+    else:
+        
+        prec = choix -4
+        coord_prec = trouve(liste, prec)
+        coord = [coord_prec[0], coord_prec[1]+1]
+        return coord
+
+# La fonction prend une liste, un point de départ et d'arrivé en arguments.
+# La fonction effectue l'échange des deux cartes et retourne les nouvelle 
+# liste.
+def bouger(liste, depart, arriver):
+    temp_dep = liste[depart[0]][depart[1]]
+    temp_arr = liste[arriver[0]][arriver[1]]
+    liste[depart[0]].remove(temp_dep)
+    liste[depart[0]].insert(depart[1], temp_arr)
+    liste[arriver[0]].remove(temp_arr)
+    liste[arriver[0]].insert(arriver[1], temp_dep)
+    return liste
+
+#Affichage HTML
+def generer_nom_carte():
+  cartes =[]
+  for i in range(13):
+    cartes_tmp = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
+    cartes.append(cartes_tmp[i] + "C.svg")
+    cartes.append(cartes_tmp[i] + "D.svg")
+    cartes.append(cartes_tmp[i] + "H.svg")
+    cartes.append(cartes_tmp[i] + "S.svg")
+  return cartes
+
+def melanger_liste():
+  liste_cartes = list(range(0,52))
+  n = len(liste_cartes)
+  for i in range(n - 1, 0, -1):
+    j = randint(0, i)
+    liste_cartes[i], liste_cartes[j] = liste_cartes[j], liste_cartes[i]
+  return liste_cartes
+
+nb_brassage = 3
+
+def mise_a_jour(case,indice):
+  # changer la couleur de fond de la case 0
+  case0 = document.querySelector("#"+case)
+  case0.removeAttribute("style")
+  les_as = trouve_index(liste_cartes, [0, 1, 2, 3])
+  les_as = les_zeros(les_as)
+  les_prec = precedante(les_as)
+  cartes_prec = cartes(liste_cartes, les_prec)
+  cartes_sui = suivante(cartes_prec, les_as)
+  repartition_cartes = generer_nom_carte()
+  indice_carte = repartition_cartes.index(indice)
+  indice_choix = cartes_sui.index(indice_carte)
+  le_choix = cartes_sui[indice_choix]
+  depart = trouve(liste_cartes, le_choix)
+  arriver = destination(liste_cartes, le_choix)
+  #print(depart)
+  #print(arriver)
+  nouv_list = bouger(liste_cartes, depart, arriver)
+  #print(nouv_list)
+  changement(nouv_list)
+
+def changement(index_cartes):
+  global liste_cartes, nb_brassage
+  liste_cartes  = index_cartes
+  racine = document.querySelector("#cb-body")
+  racine.innerHTML = ""
+  def generer_grille(rows, cols):
+    grille_html = """
+    <style>
+      #jeu table { float:none; }  
+      #jeu table td { border:0; padding:1px 2px; height:auto; width:auto; }
+      #jeu table td img { height:140px; }
+      
+      .bouton {
+        font-size: 15px;
+        border-radius: 5px;
+        padding: -2px;
+        border: 1px solid #999;
+      }
+      
+      #nombre-clicks {
+      margin-left: 10px;
+      }
+    </style>
+    <div id='jeu'>
+      <table>
+    """
+    nom_carte = generer_nom_carte()
+    for i in range(rows):
+      grille_html += "<tr>"
+      for j in range(cols):
+        if liste_cartes[i][j] <= 3:
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' onclick='mise_a_jour(\"" + case_id + "\", \"" + nom_carte[liste_cartes[i][j]] + "\")'><img src='cards/absent.svg'></td>"
+          #print(liste_cartes[i][j])
+        else:
+          case_id = "case" + str(i * cols + j)
+          grille_html += "<td id='" + case_id + "' onclick='mise_a_jour(\"" + case_id + "\", \"" + nom_carte[liste_cartes[i][j]] + "\")'><img src='cards/" + nom_carte[liste_cartes[i][j]] + "'></td>"
+          #print(liste_cartes[i][j])
+      grille_html += "</tr>"
+    grille_html += "</table>"
+    return grille_html
+  
+  racine = document.querySelector("#cb-body")
+  racine.innerHTML = generer_grille(4,13) +  """
+    <br>
+    <div class="bouton-container">
+      <p id ="nombre-clicks">Vous pouvez encore
+      <button class ="bouton" onclick="brasser_cartes()" >Brasser les cartes</button> """ + str(nb_brassage) + """ fois
+    </div>
+    <div class="bouton-container">
+      <button id ="nombre-clicks" class ="bouton" onclick=init()>Nouvelle partie</button>   
+    </div>
+    """
+  les_as = trouve_index(liste_cartes, [0, 1, 2, 3])
+  les_as = les_zeros(les_as)
+  les_prec = precedante(les_as)
+  cartes_prec = cartes(liste_cartes, les_prec)
+  cartes_sui = suivante(cartes_prec, les_as)  
+  for l in range(len(cartes_sui)):
+    indice = trouve(liste_cartes,cartes_sui[l])
+    indice = (indice[0])*13 + indice[1]
+    # changer la couleur de fond de la case 0
+    case_id = "#case"+str(indice)
+    case0 = document.querySelector(case_id)
+    case0.setAttribute("style", "background-color: lime")  
+      
+
+def init(): 
+  cartes = deck_divise(melanger_liste())
+  changement(cartes)
